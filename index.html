@@ -1,38 +1,1215 @@
 <!DOCTYPE html>
-<html>
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <title>বাংলা টাইপিং প্র্যাকটিস</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বাংলা টাইপিং মাস্টার - বিশেষ অক্ষর সমস্যা সমাধান</title>
     <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --primary: #38bdf8;
+            --success: #4ade80;
+            --error: #f87171;
+            --text: #f8fafc;
+            --font-main: 'Kalpurush', 'Arial', sans-serif;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: var(--font-main); 
+        }
+        
         body {
+            background: radial-gradient(circle at top left, #1e293b, var(--bg-color));
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(90deg, var(--primary), #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        select, button {
+            padding: 12px 18px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
             background: #1e293b;
             color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            min-width: 150px;
+        }
+
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        select option {
+            background: #1e293b;
+            color: white;
+            padding: 12px;
+            border: none;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+        }
+
+        select::-ms-expand {
+            display: none;
+        }
+
+        button {
+            background: var(--primary);
+            border: none;
+            font-weight: bold;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
             text-align: center;
-            padding: 50px;
-            font-family: Arial;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        .bangla-text {
-            font-size: 24px;
-            color: #4ade80;
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .feature-card.active {
+            background: rgba(56, 189, 248, 0.2);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .feature-card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .typing-area {
+            background: rgba(0,0,0,0.3);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 2px solid transparent;
+            transition: 0.3s;
+        }
+
+        .typing-area:focus-within {
+            border-color: var(--primary);
+        }
+
+        .typing-prompt {
+            font-size: 1.8rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            min-height: 120px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 8px;
+        }
+
+        .word {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 2px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .word.active {
+            background: rgba(56, 189, 248, 0.3);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+            border-color: var(--primary);
+        }
+
+        .word.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 10%;
+            width: 80%;
+            height: 3px;
+            background: var(--primary);
+            animation: blink 1s infinite;
+            border-radius: 2px;
+        }
+
+        .word.completed {
+            color: var(--success);
+            background: rgba(74, 222, 128, 0.15);
+            border-color: var(--success);
+        }
+
+        .word.error {
+            color: var(--error);
+            background: rgba(248, 113, 113, 0.15);
+            border-color: var(--error);
+            animation: shake 0.5s;
+        }
+
+        .char-highlight {
+            position: relative;
+            display: inline;
+        }
+
+        .char-highlight.correct {
+            color: var(--success);
+        }
+
+        .char-highlight.wrong {
+            color: var(--error);
+            animation: shake 0.3s;
+        }
+
+        .current-char {
+            position: relative;
+            display: inline;
+        }
+
+        .current-char::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-3px); }
+            75% { transform: translateX(3px); }
+        }
+
+        .typing-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            text-align: center;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .typing-input:focus {
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: #334155;
+            border-radius: 3px;
             margin: 20px 0;
+            overflow: hidden;
         }
-        .success {
-            color: yellow;
-            font-size: 20px;
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .suggestions {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .suggestions h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .suggestion-item {
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            border-left: 3px solid var(--primary);
+        }
+
+        footer {
+            text-align: center;
             margin-top: 30px;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .typing-prompt {
+                font-size: 1.4rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .word {
+                padding: 6px 10px;
+                font-size: 1.4rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            select, button {
+                width: 100%;
+                max-width: 300px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>🎉 বাংলা টাইপিং প্র্যাকটিস</h1>
-    
-    <div class="bangla-text">এই বাংলা টেক্সট দেখা যাচ্ছে?</div>
-    <div class="bangla-text">বাংলা ভাষা আমাদের মাতৃভাষা</div>
-    <div class="bangla-text">আমি বাংলায় গান গাই</div>
-    <div class="bangla-text">বাংলাদেশ একটি সুন্দর দেশ</div>
-    
-    <div class="success">
-        ✅ যদি বাংলা টেক্সট দেখতে পান, তাহলে সফল!
+    <div class="container">
+        <header>
+            <h1>Bangla Typing Practice</h1>
+            <div class="badge">Practice And Learn</div>
+        </header>
+
+        <div class="controls">
+            <select id="layoutSelect">
+                <option value="bijoy">বিজয় বায়ান্ন</option>
+                <option value="avro">অভ্র</option>
+                <option value="proborno">প্রভাত</option>
+                <option value="unicode">ইউনিকোড</option>
+            </select>
+            <select id="levelSelect">
+                <option value="letters">অক্ষর</option>
+                <option value="words">শব্দ</option>
+                <option value="sentences">বাক্য</option>
+                <option value="paragraphs">অনুচ্ছেদ</option>
+            </select>
+            <button id="resetBtn">🔄 রিসেট</button>
+            <button id="tipsBtn">💡 টিপস</button>
+        </div>
+
+        <div class="features">
+            <div class="feature-card active" data-type="letters">
+                <h3>🔤 অক্ষর</h3>
+                <p>বাংলা বর্ণমালা অনুশীলন</p>
+            </div>
+            <div class="feature-card" data-type="words">
+                <h3>📝 শব্দ</h3>
+                <p>পূর্ণ শব্দ টাইপিং</p>
+            </div>
+            <div class="feature-card" data-type="sentences">
+                <h3>💬 বাক্য</h3>
+                <p>সম্পূর্ণ বাক্য টাইপিং</p>
+            </div>
+            <div class="feature-card" data-type="paragraphs">
+                <h3>📚 অনুচ্ছেদ</h3>
+                <p>পূর্ণাঙ্গ অনুচ্ছেদ</p>
+            </div>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-value" id="wpm">0</div>
+                <div class="stat-label">শব্দ/মিনিট</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="accuracy">100%</div>
+                <div class="stat-label">সঠিকতা</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="timer">0s</div>
+                <div class="stat-label">সময়</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="score">0</div>
+                <div class="stat-label">স্কোর</div>
+            </div>
+        </div>
+
+        <div class="typing-area">
+            <div class="typing-prompt" id="typingPrompt">
+                বাংলা টাইপিং অনুশীলন শুরু করতে উপরের কোনো অপশন সিলেক্ট করুন...
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <input type="text" class="typing-input" id="typingInput" 
+                   placeholder="এখানে টাইপ করুন..." autocomplete="off" spellcheck="false">
+        </div>
+
+        <div class="suggestions" id="suggestions">
+            <h4>💡 উন্নতির টিপস:</h4>
+            <div id="suggestionsContent"></div>
+        </div>
+
+        <footer>
+            বাংলা টাইপিং অনুশীলনে সাহায্য করাই আমাদের লক্ষ্য ।
+        </footer>
     </div>
+
+    <script>
+        // Expanded Bengali Content Database
+        const contentDatabase = {
+            letters: [
+                "ড়", "ঢ়", "য়", "র", "অ", "আ", "ই", "ঈ", "উ", "ঊ", "ঋ", "এ", "ঐ", "ও", "ঔ",
+                "ক", "খ", "গ", "ঘ", "ঙ", 
+                "চ", "ছ", "জ", "ঝ", "ঞ",
+                "ট", "ঠ", "ড", "ঢ", "ণ",
+                "ত", "থ", "দ", "ধ", "ন",
+                "প", "ফ", "ব", "ভ", "ম",
+                "য", "ল", "শ", "ষ", "স", "হ",
+                "ৎ", "ং", "ঃ", "ঁ",
+                "ক্ষ", "জ্ঞ", "শ্র", "স্ক", "স্ত", "স্প", "স্ব",
+                "ত্র", "দ্দ", "দ্ধ", "দ্ভ", "ন্ত", "ন্দ", "ম্প"
+            ],
+            
+            words: [
+                "ড়", "ঢ়", "য়", "র", "বড়", "গাড়ি", "দড়ি", "বৃষ্টি", "কড়া", "সড়ক",
+                "বাংলা", "ভাষা", "মানুষ", "দেশ", "শিক্ষা", "বই", "জল", "ফল", "ফুল", "বাড়ি",
+                "রাস্তা", "গাড়ি", "টাকা", "সময়", "কাজ", "কথা", "সূর্য", "চাঁদ", "তারা", "আকাশ",
+                "মেঘ", "বৃষ্টি", "খেলা", "গান", "কবিতা", "গল্প", "ইতিহাস", "সংস্কৃতি", "প্রযুক্তি", "বিজ্ঞান",
+                "বাবা", "মা", "ভাই", "বোন", "ছেলে", "মেয়ে", "দাদা", "দাদী", "নানা", "নানী",
+                "চাচা", "চাচী", "মামা", "মামী", "খালা", "খালু", "ফুফা", "ফুফু", "জেঠা", "জেঠী",
+                "গরু", "ছাগল", "মুরগি", "হাঁস", "মাছ", "বাঘ", "সিংহ", "হাতি", "ঘোড়া", "কুকুর",
+                "গাছ", "ফল", "ফুল", "ঘাস", "পাতা", "ডাল", "শাখা", "বন", "জঙ্গল", "বাগান",
+                "নদী", "সমুদ্র", "পাহাড়", "পর্বত", "মাঠ", "জমি", "বালি", "পানি", "বাতাস", "আগুন"
+            ],
+            
+            sentences: [
+                "বড় গাছটি রাস্তার পাশে দাঁড়িয়ে আছে।",
+                "বৃষ্টিতে রাস্তা ভিজে গেছে।",
+                "গাড়ি চালানোর সময় সড়ক সতর্ক থাকুন।",
+                "দড়ি দিয়ে বাঁধুন প্যাকেটটি।",
+                "আমার সোনার বাংলা আমি তোমায় ভালোবাসি।",
+                "চিরদিন তোমার আকাশ তোমার বাতাস আমার প্রাণে বাজায় বাঁশি।",
+                "বাংলা ভাষা আমাদের মাতৃভাষা।",
+                "আমরা সবাই বাংলাদেশী।",
+                "শিক্ষা জাতির মেরুদন্ড।",
+                "আজ খুব ভালো আবহাওয়া।",
+                "বাংলাদেশ একটি সুন্দর দেশ।",
+                "নদীমাতৃক দেশ আমাদের এই বাংলাদেশ।",
+                "গ্রাম বাংলার চিত্র অত্যন্ত মনোরম।",
+                "বাংলার মানুষ খুব পরিশ্রমী।",
+                "বাংলাদেশের প্রকৃতি অত্যন্ত সমৃদ্ধ।",
+                "বাংলাদেশের মানুষ অতিথিপরায়ণ।",
+                "বাংলাদেশে ছয়টি ঋতু রয়েছে।",
+                "বাংলাদেশের জাতীয় ফুল শাপলা।",
+                "বাংলাদেশের জাতীয় পাখি দোয়েল।"
+            ],
+            
+            paragraphs: [
+                "বাংলা সাহিত্য হাজার বছরের পুরনো ঐতিহ্য বহন করে। চর্যাপদ থেকে শুরু করে আধুনিক সাহিত্য পর্যন্ত বাংলা সাহিত্যের বিবিধ ধারা রয়েছে। রবীন্দ্রনাথ ঠাকুর, কাজী নজরুল ইসলাম, বঙ্কিমচন্দ্র চট্টোপাধ্যায়, শরৎচন্দ্র চট্টোপাধ্যায় প্রমুখ সাহিত্যিক বাংলা সাহিত্যকে বিশ্ব দরবারে প্রতিষ্ঠিত করেছেন। বাংলা ভাষা ও সাহিত্য আমাদের গর্বের সম্পদ।",
+                
+                "বাংলাদেশের মুক্তিযুদ্ধ বাঙালি জাতির ইতিহাসে একটি গৌরবময় অধ্যায়। ১৯৭১ সালে বাংলাদেশের মানুষ তাদের ভাষা ও সংস্কৃতির অধিকার রক্ষার জন্য সংগ্রাম করেছিল। এই যুদ্ধ শুধু রাজনৈতিক স্বাধীনতাই নয়, বাঙালি জাতির স্বকীয়তা ও সাংস্কৃতিক পরিচয়ও প্রতিষ্ঠা করেছিল। মুক্তিযুদ্ধের চেতনা আমাদের জাতীয় জীবনের মূল ভিত্তি।",
+                
+                "বাংলাদেশের অর্থনীতি কৃষি, শিল্প ও সেবা খাতের সমন্বয়ে গঠিত। বাংলাদেশের প্রধান কৃষি পণ্য ধান, পাট, চা, গম, আখ, ডাল, তেলবীজ, ফলমূল ও শাকসবজি। বাংলাদেশের প্রধান শিল্প পণ্য পোশাক, ওষুধ, সিমেন্ট, চামড়া, ইলেকট্রনিক্স ও মাছ। বাংলাদেশের প্রধান রপ্তানি পণ্য পোশাক, পাট ও পাটজাত দ্রব্য, চামড়া ও চামড়াজাত দ্রব্য, হিমায়িত মাছ ও চিংড়ি।"
+            ]
+        };
+
+        // Track used content to avoid repetition
+        let usedContent = {
+            letters: [],
+            words: [],
+            sentences: [],
+            paragraphs: []
+        };
+
+        // App State
+        let currentWords = [];
+        let currentWordIndex = 0;
+        let currentCharIndex = 0;
+        let errors = 0;
+        let totalKeystrokes = 0;
+        let startTime = null;
+        let timerInterval = null;
+        let currentMode = 'letters';
+        let currentLayout = 'bijoy';
+        let isGameActive = true;
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded - initializing app');
+            initializeApp();
+        });
+
+        function initializeApp() {
+            console.log('Initializing app...');
+            
+            // Set up all event listeners
+            setupEventListeners();
+            
+            // Load initial content
+            loadContent(currentMode);
+            
+            // Focus on input
+            setTimeout(() => {
+                document.getElementById('typingInput').focus();
+            }, 500);
+        }
+
+        function setupEventListeners() {
+            console.log('Setting up event listeners...');
+            
+            // Feature cards event listeners
+            document.querySelectorAll('.feature-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const type = this.getAttribute('data-type');
+                    console.log('Feature card clicked:', type);
+                    selectFeature(type);
+                });
+            });
+
+            // Layout select event listener
+            const layoutSelect = document.getElementById('layoutSelect');
+            if (layoutSelect) {
+                layoutSelect.addEventListener('change', function(e) {
+                    currentLayout = this.value;
+                    console.log('Layout changed to:', currentLayout);
+                    updateLayoutInfo();
+                });
+                
+                layoutSelect.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+
+            // Level select event listener
+            const levelSelect = document.getElementById('levelSelect');
+            if (levelSelect) {
+                levelSelect.addEventListener('change', function(e) {
+                    const level = this.value;
+                    console.log('Level changed to:', level);
+                    selectFeature(level);
+                });
+                
+                levelSelect.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+
+            // Reset button
+            document.getElementById('resetBtn').addEventListener('click', function() {
+                console.log('Reset button clicked');
+                resetGame();
+            });
+
+            // Tips button
+            document.getElementById('tipsBtn').addEventListener('click', function() {
+                console.log('Tips button clicked');
+                showTips();
+            });
+
+            // Typing input - COMPLETELY REWRITTEN VERSION
+            const typingInput = document.getElementById('typingInput');
+            
+            typingInput.addEventListener('keydown', function(e) {
+                // Prevent space bar from causing issues
+                if (e.key === ' ' || e.key === 'Spacebar') {
+                    e.preventDefault();
+                    
+                    // For words mode, complete the word when space is pressed
+                    if ((currentMode === 'words' || currentMode === 'sentences' || currentMode === 'paragraphs') && 
+                        this.value.trim().length > 0) {
+                        checkCompleteWord(this.value.trim());
+                        this.value = '';
+                    }
+                    return;
+                }
+                
+                // Allow reset with Escape key
+                if (e.key === 'Escape') {
+                    resetGame();
+                }
+                
+                // Handle Enter key for word completion in words mode
+                if (e.key === 'Enter' && 
+                    (currentMode === 'words' || currentMode === 'sentences' || currentMode === 'paragraphs')) {
+                    e.preventDefault();
+                    if (this.value.trim().length > 0) {
+                        checkCompleteWord(this.value.trim());
+                        this.value = '';
+                    }
+                    return;
+                }
+            });
+
+            typingInput.addEventListener('input', function(e) {
+                if (!isGameActive) return;
+                if (currentWords.length === 0 || currentWordIndex >= currentWords.length) return;
+
+                const inputValue = e.target.value;
+                
+                // If input is empty, return
+                if (inputValue.length === 0) {
+                    return;
+                }
+
+                if (!startTime) {
+                    startTime = new Date();
+                    startTimer();
+                }
+
+                // Handle different modes
+                switch(currentMode) {
+                    case 'letters':
+                        handleLettersMode(inputValue, e);
+                        break;
+                    case 'words':
+                        // For words mode, we don't process character by character
+                        // We only complete when space or enter is pressed (handled in keydown)
+                        break;
+                    case 'sentences':
+                    case 'paragraphs':
+                        handleTextMode(inputValue, e);
+                        break;
+                }
+                
+                updateProgress();
+            });
+
+            console.log('All event listeners set up successfully');
+        }
+
+        function handleLettersMode(inputValue, e) {
+            const currentWord = currentWords[currentWordIndex];
+            
+            if (inputValue === currentWord) {
+                handleCorrectLetter();
+                e.target.value = '';
+            } else if (inputValue.length >= currentWord.length) {
+                handleWrongInput();
+                e.target.value = '';
+            }
+        }
+
+        function handleTextMode(inputValue, e) {
+            const currentWord = currentWords[currentWordIndex];
+            
+            if (currentCharIndex < currentWord.length) {
+                const targetChar = currentWord[currentCharIndex];
+                const inputChar = inputValue[inputValue.length - 1];
+                
+                if (inputChar === targetChar) {
+                    handleCorrectCharacter();
+                } else {
+                    handleWrongCharacter();
+                }
+                
+                // Clear input after processing
+                setTimeout(() => {
+                    e.target.value = '';
+                }, 10);
+            }
+        }
+
+        function updateLayoutInfo() {
+            const layoutNames = {
+                'bijoy': 'বিজয় বায়ান্ন',
+                'avro': 'অভ্র', 
+                'proborno': 'প্রভাত',
+                'unicode': 'ইউনিকোড'
+            };
+            
+            console.log(`Current layout: ${layoutNames[currentLayout]}`);
+        }
+
+        function selectFeature(type) {
+            console.log('Selecting feature:', type);
+            
+            // Update active feature card
+            document.querySelectorAll('.feature-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            const selectedCard = document.querySelector(`.feature-card[data-type="${type}"]`);
+            if (selectedCard) {
+                selectedCard.classList.add('active');
+            }
+            
+            // Update level select to match
+            const levelSelect = document.getElementById('levelSelect');
+            if (levelSelect) {
+                levelSelect.value = type;
+            }
+            
+            // Load content
+            currentMode = type;
+            loadContent(type);
+        }
+
+        function resetGame() {
+            console.log('Resetting game...');
+            
+            // Clear timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            
+            // Reset all game state
+            currentWordIndex = 0;
+            currentCharIndex = 0;
+            errors = 0;
+            totalKeystrokes = 0;
+            startTime = null;
+            isGameActive = true;
+            
+            // Reset UI
+            document.getElementById('wpm').textContent = '0';
+            document.getElementById('accuracy').textContent = '100%';
+            document.getElementById('timer').textContent = '0s';
+            document.getElementById('score').textContent = '0';
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('typingInput').value = '';
+            
+            // Clear any error states and reload current content
+            reloadCurrentContent();
+            
+            hideSuggestions();
+            
+            // Re-focus on input
+            setTimeout(() => {
+                const input = document.getElementById('typingInput');
+                input.value = '';
+                input.focus();
+            }, 100);
+        }
+
+        function reloadCurrentContent() {
+            // Clear all error states and reset the display
+            const promptElement = document.getElementById('typingPrompt');
+            promptElement.innerHTML = '';
+
+            if (currentWords.length === 0) {
+                promptElement.textContent = 'কন্টেন্ট লোড করতে সমস্যা হচ্ছে। দয়া করে আবার চেষ্টা করুন।';
+                return;
+            }
+
+            // Re-display the current words without any errors
+            currentWords.forEach((word, index) => {
+                const wordSpan = document.createElement('span');
+                wordSpan.className = 'word';
+                wordSpan.textContent = word;
+                wordSpan.id = `word-${index}`;
+                wordSpan.setAttribute('data-original', word);
+                
+                if (index === 0) {
+                    wordSpan.classList.add('active');
+                }
+                
+                promptElement.appendChild(wordSpan);
+                
+                if (index < currentWords.length - 1) {
+                    promptElement.appendChild(document.createTextNode(' '));
+                }
+            });
+        }
+
+        function getRandomContent(contentArray, mode, count = null) {
+            // Filter out recently used content
+            const availableContent = contentArray.filter(item => 
+                !usedContent[mode].includes(item)
+            );
+            
+            // If all content has been used, reset the used list
+            if (availableContent.length === 0) {
+                usedContent[mode] = [];
+                return getRandomContent(contentArray, mode, count);
+            }
+            
+            let selectedContent;
+            
+            if (count) {
+                // For modes that need multiple items (like words)
+                selectedContent = [];
+                const tempAvailable = [...availableContent];
+                
+                for (let i = 0; i < Math.min(count, tempAvailable.length); i++) {
+                    const randomIndex = Math.floor(Math.random() * tempAvailable.length);
+                    selectedContent.push(tempAvailable[randomIndex]);
+                    tempAvailable.splice(randomIndex, 1);
+                }
+            } else {
+                // For modes that need single item (like sentences, paragraphs)
+                const randomIndex = Math.floor(Math.random() * availableContent.length);
+                selectedContent = availableContent[randomIndex];
+            }
+            
+            // Add to used content (limit to last 10 to avoid memory issues)
+            if (Array.isArray(selectedContent)) {
+                usedContent[mode].push(...selectedContent);
+            } else {
+                usedContent[mode].push(selectedContent);
+            }
+            
+            // Keep only last 10 used items
+            if (usedContent[mode].length > 10) {
+                usedContent[mode] = usedContent[mode].slice(-10);
+            }
+            
+            return selectedContent;
+        }
+
+        function loadContent(mode) {
+            console.log('Loading content for mode:', mode);
+            currentMode = mode;
+            
+            let content = [];
+            
+            switch(mode) {
+                case 'letters':
+                    // Show random 15 letters each time
+                    const randomLetters = getRandomContent(contentDatabase.letters, 'letters', 15);
+                    content = randomLetters;
+                    break;
+                    
+                case 'words':
+                    // Show random 12 words each time
+                    const randomWords = getRandomContent(contentDatabase.words, 'words', 12);
+                    content = randomWords;
+                    break;
+                    
+                case 'sentences':
+                    const randomSentence = getRandomContent(contentDatabase.sentences, 'sentences');
+                    content = randomSentence.split(' ').filter(word => word.length > 0);
+                    if (content.length > 0) {
+                        const lastWord = content[content.length - 1];
+                        content[content.length - 1] = lastWord.replace(/[।,?!]/g, '');
+                    }
+                    break;
+                    
+                case 'paragraphs':
+                    const randomParagraph = getRandomContent(contentDatabase.paragraphs, 'paragraphs');
+                    content = randomParagraph.split(' ').filter(word => word.length > 0);
+                    break;
+                    
+                default:
+                    content = ['বাংলা', 'টাইপিং', 'অনুশীলন'];
+            }
+            
+            displayContent(content);
+            resetGame();
+        }
+
+        function displayContent(content) {
+            console.log('Displaying content:', content);
+            currentWords = content;
+            currentWordIndex = 0;
+            currentCharIndex = 0;
+            
+            const promptElement = document.getElementById('typingPrompt');
+            promptElement.innerHTML = '';
+
+            if (content.length === 0) {
+                promptElement.textContent = 'কন্টেন্ট লোড করতে সমস্যা হচ্ছে। দয়া করে আবার চেষ্টা করুন।';
+                return;
+            }
+
+            content.forEach((word, index) => {
+                const wordSpan = document.createElement('span');
+                wordSpan.className = 'word';
+                wordSpan.textContent = word;
+                wordSpan.id = `word-${index}`;
+                wordSpan.setAttribute('data-original', word);
+                
+                if (index === 0) {
+                    wordSpan.classList.add('active');
+                }
+                
+                promptElement.appendChild(wordSpan);
+                
+                if (index < content.length - 1) {
+                    promptElement.appendChild(document.createTextNode(' '));
+                }
+            });
+        }
+
+        function handleCorrectLetter() {
+            const currentWordElement = document.getElementById(`word-${currentWordIndex}`);
+            if (!currentWordElement) return;
+            
+            currentWordElement.classList.remove('error');
+            currentWordElement.classList.add('completed');
+            
+            currentWordIndex++;
+            totalKeystrokes++;
+            
+            if (currentWordIndex < currentWords.length) {
+                const nextWordElement = document.getElementById(`word-${currentWordIndex}`);
+                if (nextWordElement) {
+                    nextWordElement.classList.add('active');
+                }
+            } else {
+                handleCompletion();
+            }
+            
+            updateStats();
+        }
+
+        function handleCorrectCharacter() {
+            const currentWordElement = document.getElementById(`word-${currentWordIndex}`);
+            if (!currentWordElement) return;
+            
+            currentWordElement.classList.remove('error');
+            
+            // Get the original word text
+            const originalWord = currentWordElement.getAttribute('data-original');
+            
+            // Update the display to show progress
+            let displayHTML = '';
+            for (let i = 0; i < originalWord.length; i++) {
+                if (i < currentCharIndex + 1) {
+                    displayHTML += `<span class="char-highlight correct">${originalWord[i]}</span>`;
+                } else {
+                    displayHTML += originalWord[i];
+                }
+            }
+            
+            currentWordElement.innerHTML = displayHTML;
+            
+            currentCharIndex++;
+            totalKeystrokes++;
+            
+            // Check if word is completed
+            if (currentCharIndex >= originalWord.length) {
+                currentWordElement.classList.remove('active');
+                currentWordElement.classList.add('completed');
+                
+                currentWordIndex++;
+                currentCharIndex = 0;
+                
+                if (currentWordIndex < currentWords.length) {
+                    const nextWordElement = document.getElementById(`word-${currentWordIndex}`);
+                    if (nextWordElement) {
+                        nextWordElement.classList.add('active');
+                        // Reset the next word to show full text
+                        nextWordElement.innerHTML = nextWordElement.getAttribute('data-original');
+                    }
+                } else {
+                    handleCompletion();
+                }
+            }
+            
+            updateStats();
+        }
+
+        function handleWrongCharacter() {
+            const currentWordElement = document.getElementById(`word-${currentWordIndex}`);
+            if (!currentWordElement) return;
+            
+            currentWordElement.classList.add('error');
+            
+            errors++;
+            totalKeystrokes++;
+            
+            // Show error briefly
+            setTimeout(() => {
+                currentWordElement.classList.remove('error');
+            }, 500);
+            
+            updateStats();
+        }
+
+        function handleWrongInput() {
+            const currentWordElement = document.getElementById(`word-${currentWordIndex}`);
+            currentWordElement.classList.add('error');
+            errors++;
+            totalKeystrokes++;
+
+            setTimeout(() => {
+                currentWordElement.classList.remove('error');
+            }, 500);
+
+            updateStats();
+        }
+
+        // COMPLETELY REWRITTEN FUNCTION - This fixes the special character issue
+        function checkCompleteWord(typedWord) {
+            const currentWord = currentWords[currentWordIndex];
+            const currentWordElement = document.getElementById(`word-${currentWordIndex}`);
+            
+            if (!currentWordElement) return;
+            
+            // Debug logging for special characters
+            console.log('Typed:', typedWord, 'Expected:', currentWord);
+            console.log('Typed length:', typedWord.length, 'Expected length:', currentWord.length);
+            
+            // SPECIAL CHECK FOR BENGALI CHARACTERS: ড়, ঢ়, য়, র
+            // Let's check if these specific characters are causing issues
+            const specialChars = ['ড়', 'ঢ়', 'য়', 'র'];
+            let hasSpecialChar = false;
+            
+            for (let char of specialChars) {
+                if (currentWord.includes(char)) {
+                    hasSpecialChar = true;
+                    console.log(`Found special character: ${char} in word: ${currentWord}`);
+                    break;
+                }
+            }
+            
+            // Compare character by character to ensure accuracy
+            let isCorrect = true;
+            
+            if (typedWord.length !== currentWord.length) {
+                isCorrect = false;
+                console.log('Length mismatch - Typed:', typedWord.length, 'Expected:', currentWord.length);
+            } else {
+                for (let i = 0; i < typedWord.length; i++) {
+                    if (typedWord[i] !== currentWord[i]) {
+                        isCorrect = false;
+                        console.log(`Character mismatch at position ${i}: '${typedWord[i]}' vs '${currentWord[i]}'`);
+                        console.log(`Char codes - Typed: ${typedWord.charCodeAt(i)}, Expected: ${currentWord.charCodeAt(i)}`);
+                        break;
+                    }
+                }
+            }
+            
+            if (isCorrect) {
+                // Correct word
+                console.log('Word is CORRECT!');
+                currentWordElement.classList.remove('error', 'active');
+                currentWordElement.classList.add('completed');
+                currentWordElement.innerHTML = currentWord;
+                
+                currentWordIndex++;
+                totalKeystrokes++;
+                
+                if (currentWordIndex < currentWords.length) {
+                    const nextWordElement = document.getElementById(`word-${currentWordIndex}`);
+                    if (nextWordElement) {
+                        nextWordElement.classList.add('active');
+                        nextWordElement.innerHTML = nextWordElement.getAttribute('data-original');
+                    }
+                } else {
+                    handleCompletion();
+                }
+            } else {
+                // Wrong word
+                console.log('Word is WRONG!');
+                currentWordElement.classList.add('error');
+                errors++;
+                totalKeystrokes++;
+                
+                // Show correct word briefly
+                const originalWord = currentWordElement.getAttribute('data-original');
+                currentWordElement.innerHTML = originalWord;
+                setTimeout(() => {
+                    currentWordElement.innerHTML = originalWord;
+                    currentWordElement.classList.remove('error');
+                }, 1000);
+            }
+            
+            updateStats();
+            updateProgress();
+        }
+
+        function updateStats() {
+            const accuracy = totalKeystrokes === 0 ? 100 : 
+                Math.round(((totalKeystrokes - errors) / totalKeystrokes) * 100);
+            
+            document.getElementById('accuracy').textContent = accuracy + '%';
+            
+            const progress = currentWordIndex / currentWords.length;
+            const score = Math.max(0, Math.round(progress * 1000) - (errors * 5));
+            document.getElementById('score').textContent = score;
+        }
+
+        function updateProgress() {
+            const progress = (currentWordIndex / currentWords.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                const now = new Date();
+                const seconds = Math.floor((now - startTime) / 1000);
+                document.getElementById('timer').textContent = seconds + 's';
+                
+                const minutes = seconds / 60;
+                const wordsTyped = currentWordIndex;
+                const wpm = minutes > 0 ? Math.round((wordsTyped / 5) / minutes) : 0;
+                document.getElementById('wpm').textContent = wpm;
+            }, 1000);
+        }
+
+        function handleCompletion() {
+            isGameActive = false;
+            clearInterval(timerInterval);
+            
+            const finalWPM = document.getElementById('wpm').textContent;
+            const finalAccuracy = document.getElementById('accuracy').textContent;
+            const finalTime = document.getElementById('timer').textContent;
+            const finalScore = document.getElementById('score').textContent;
+            
+            setTimeout(() => {
+                alert(`অভিনন্দন! আপনি এই অনুশীলনটি সম্পূর্ণ করেছেন।\n\nমোট সময়: ${finalTime}\nগতি: ${finalWPM} WPM\nসঠিকতা: ${finalAccuracy}\nস্কোর: ${finalScore}\n\nনতুন কন্টেন্ট দিয়ে আবার শুরু করুন!`);
+                // Automatically load new content after completion
+                loadContent(currentMode);
+            }, 500);
+        }
+
+        function showTips() {
+            const tips = [
+                'আঙ্গুল সঠিক অবস্থানে রাখুন - হোম রো technique ব্যবহার করুন',
+                'মনোযোগ সহকারে টাইপ করুন, দ্রুত গতির চেয়ে নির্ভুলতা বেশি গুরুত্বপূর্ণ',
+                'নিয়মিত অনুশীলন করুন - দিনে কমপক্ষে ১৫-৩০ মিনিট',
+                'ভুল হলে হতাশ হবেন না, ভুল থেকে শিখুন',
+                'টাইপ করার সময় পিঠ সোজা রাখুন এবং সঠিক posture maintain করুন',
+                'প্রতিটি কী চাপতে হালকা pressure ব্যবহার করুন',
+                'স্ক্রিনের দিকে তাকান, কী-বোর্ডের দিকে নয়',
+                'গতি ধীরে ধীরে বাড়ান, একসাথে অনেকটা increase করার চেষ্টা করবেন না'
+            ];
+            
+            const suggestionsDiv = document.getElementById('suggestions');
+            const contentDiv = document.getElementById('suggestionsContent');
+            
+            contentDiv.innerHTML = tips.map(tip => 
+                `<div class="suggestion-item">${tip}</div>`
+            ).join('');
+            
+            suggestionsDiv.style.display = 'block';
+        }
+
+        function hideSuggestions() {
+            document.getElementById('suggestions').style.display = 'none';
+        }
+
+        // Auto-focus on input when clicking anywhere in container
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.container') && !e.target.closest('select')) {
+                document.getElementById('typingInput').focus();
+            }
+        });
+    </script>
 </body>
 </html>
+
+
